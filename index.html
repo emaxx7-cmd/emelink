@@ -12,7 +12,7 @@
   <link rel="manifest" href="manifest.json">
   <title>Emeli — привычки</title>
   <style>
-    :root {
+    :root, [data-theme="dark"] {
       --bg: #0a0a0f;
       --bg-elev-1: #14141c;
       --bg-elev-2: #1c1c28;
@@ -23,13 +23,41 @@
       --text-dim: #9a9aae;
       --text-muted: #5e5e75;
       --accent: #a78bfa;
+      --accent-strong: #7c3aed;
       --accent-soft: rgba(167,139,250,0.18);
       --danger: #f87171;
       --success: #4ade80;
+      --ambient-1: rgba(167,139,250,0.08);
+      --ambient-2: rgba(96,165,250,0.05);
+      --shadow-strong: rgba(0,0,0,0.5);
+      --color-scheme: dark;
       --radius-lg: 24px;
       --radius-md: 16px;
       --radius-sm: 10px;
     }
+
+    [data-theme="light"] {
+      --bg: #f7f7fb;
+      --bg-elev-1: #ffffff;
+      --bg-elev-2: #ffffff;
+      --bg-elev-3: #ececf3;
+      --line: rgba(15,15,30,0.06);
+      --line-strong: rgba(15,15,30,0.12);
+      --text: #0d0d18;
+      --text-dim: #56566c;
+      --text-muted: #8e8ea3;
+      --accent: #7c3aed;
+      --accent-strong: #6d28d9;
+      --accent-soft: rgba(124,58,237,0.10);
+      --danger: #dc2626;
+      --success: #16a34a;
+      --ambient-1: rgba(124,58,237,0.08);
+      --ambient-2: rgba(59,130,246,0.05);
+      --shadow-strong: rgba(15,15,30,0.12);
+      --color-scheme: light;
+    }
+
+    html { color-scheme: var(--color-scheme); }
 
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -59,8 +87,8 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(167,139,250,0.08), transparent 60%),
-        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(96,165,250,0.05), transparent 60%);
+        radial-gradient(ellipse 80% 50% at 50% 0%, var(--ambient-1), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, var(--ambient-2), transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
@@ -328,13 +356,13 @@
       right: 24px;
       width: 56px;
       height: 56px;
-      background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
       color: #fff;
       border: none;
       border-radius: 50%;
       font-size: 26px;
       font-weight: 300;
-      box-shadow: 0 8px 24px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-strong) 45%, transparent), inset 0 1px 0 rgba(255,255,255,0.25);
       cursor: pointer;
       z-index: 100;
       display: flex;
@@ -458,9 +486,9 @@
       flex: 1;
     }
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+      box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-strong) 35%, transparent);
     }
     .btn-primary:active { transform: scale(0.97); }
     .btn-secondary {
@@ -680,6 +708,130 @@
       z-index: 1500;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ───── Header actions ───── */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--bg-elev-1);
+      border: 1px solid var(--line);
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+    .icon-btn:active { transform: scale(0.92); background: var(--bg-elev-3); color: var(--text); }
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    /* ───── Settings UI ───── */
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .settings-row:last-of-type { border-bottom: none; }
+    .settings-row-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .settings-row-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .settings-row-text { flex: 1; min-width: 0; }
+
+    /* Segmented control */
+    .segmented {
+      display: inline-flex;
+      background: var(--bg-elev-1);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .segmented button {
+      background: transparent;
+      border: none;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .segmented button.on {
+      background: var(--bg-elev-3);
+      color: var(--text);
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      width: 46px;
+      height: 28px;
+      background: var(--bg-elev-3);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      flex-shrink: 0;
+    }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 22px; height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toggle.on { background: var(--accent); }
+    .toggle.on::after { transform: translateX(18px); }
+
+    /* Settings group block */
+    .settings-block {
+      background: var(--bg-elev-1);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 0 16px;
+      margin-bottom: 12px;
+    }
+    .settings-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 14px 0;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+    .settings-action:last-child { border-bottom: none; }
+    .settings-action:active { color: var(--accent); }
+    .settings-action.danger { color: var(--danger); }
+    .settings-action .chev { color: var(--text-muted); font-size: 18px; }
   </style>
 </head>
 <body>
@@ -689,7 +841,15 @@
       <span class="date-label" id="dateLabel"></span>
       <h1>Привычки</h1>
     </div>
-    <div class="ideal-badge" id="idealBadge">Идеальная неделя</div>
+    <div class="header-actions">
+      <div class="ideal-badge" id="idealBadge">Идеальная неделя</div>
+      <button class="icon-btn" id="settingsBtn" aria-label="Настройки">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
   </header>
 
   <div class="week-strip" id="weekStrip"></div>
@@ -710,6 +870,13 @@
   <div class="overlay" id="formOverlay">
     <div class="modal" id="formModal"></div>
   </div>
+
+  <div class="overlay" id="settingsOverlay">
+    <div class="modal" id="settingsModal"></div>
+  </div>
+
+  <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+  <a id="downloadLink" style="display:none"></a>
 
   <script>
   (function() {
@@ -740,6 +907,66 @@
 
     const EMOJIS = ['⭐','💪','🧠','📚','💧','🏃','🧘','🎯','💤','🍎','🚭','✍️','📱','🎨','💰','☀️','🌙','🎸','☕','🌱','🔥','❤️','✨'];
     const COLORS = ['#a78bfa','#60a5fa','#34d399','#fbbf24','#fb7185','#f472b6','#22d3ee','#fb923c'];
+
+    // ───────── Preferences ─────────
+    const Prefs = {
+      get theme() { return localStorage.getItem('emeli.theme') || 'system'; },
+      set theme(v) { localStorage.setItem('emeli.theme', v); },
+      get sound() { const v = localStorage.getItem('emeli.sound'); return v === null ? true : v === '1'; },
+      set sound(v) { localStorage.setItem('emeli.sound', v ? '1' : '0'); },
+      get haptics() { const v = localStorage.getItem('emeli.haptics'); return v === null ? true : v === '1'; },
+      set haptics(v) { localStorage.setItem('emeli.haptics', v ? '1' : '0'); },
+    };
+
+    // ───────── Theme ─────────
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme() {
+      const pref = Prefs.theme;
+      const resolved = pref === 'system' ? (mql.matches ? 'dark' : 'light') : pref;
+      document.documentElement.setAttribute('data-theme', resolved);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', resolved === 'light' ? '#f7f7fb' : '#0a0a0f');
+    }
+    mql.addEventListener?.('change', () => { if (Prefs.theme === 'system') applyTheme(); });
+
+    // ───────── Sound ─────────
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!Prefs.sound) return null;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+      } catch (_) { return null; }
+    }
+    function playBlip(notes) {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      const t0 = ctx.currentTime;
+      notes.forEach((n, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = n.type || 'sine';
+        osc.frequency.value = n.freq;
+        const start = t0 + (n.at || i * 0.06);
+        const dur = n.dur || 0.12;
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(n.vol || 0.12, start + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + dur + 0.02);
+      });
+    }
+    const SoundFX = {
+      on:  () => playBlip([{ freq: 660, dur: 0.08 }, { freq: 990, dur: 0.16, at: 0.05 }]),
+      off: () => playBlip([{ freq: 360, dur: 0.12, vol: 0.09 }]),
+    };
+
+    function buzz(pattern) {
+      if (!Prefs.haptics) return;
+      if (navigator.vibrate) navigator.vibrate(pattern);
+    }
 
     // ───────── IndexedDB ─────────
     let db;
@@ -874,6 +1101,11 @@
     const dateLabel = document.getElementById('dateLabel');
     const weekStrip = document.getElementById('weekStrip');
     const toast = document.getElementById('toast');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const sOver = document.getElementById('settingsOverlay');
+    const sMod = document.getElementById('settingsModal');
+    const importFile = document.getElementById('importFile');
+    const downloadLink = document.getElementById('downloadLink');
 
     // ───────── Toast ─────────
     let toastTimer;
@@ -903,7 +1135,8 @@
         const today = fmt(new Date());
         const turnedOn = await DB.toggle(hId, today);
         card.classList.remove('long-pressing');
-        if (navigator.vibrate) navigator.vibrate(turnedOn ? [12, 40, 12] : 10);
+        if (turnedOn) { SoundFX.on(); buzz([12, 40, 12]); }
+        else { SoundFX.off(); buzz(10); }
         showToast(turnedOn ? '✓ Отмечено' : 'Снято');
         renderQueued();
       }, 480);
@@ -1218,7 +1451,7 @@
     }
 
     // Tap on overlay (outside modal) → close
-    [dOver, fOver].forEach(ov => {
+    [dOver, fOver, sOver].forEach(ov => {
       ov.addEventListener('click', e => { if (e.target === ov) closeOverlay(ov); });
     });
 
@@ -1324,6 +1557,204 @@
       };
     }
 
+    // ───────── Settings ─────────
+    function openSettings() {
+      const theme = Prefs.theme;
+      sMod.innerHTML = `
+        <div class="modal-grip"></div>
+        <h2>Настройки</h2>
+
+        <div class="settings-block">
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-label">Тема</div>
+              <div class="settings-row-hint">Системная следует за iOS/браузером</div>
+            </div>
+            <div class="segmented" id="themeSeg">
+              <button data-v="system" class="${theme==='system'?'on':''}">Авто</button>
+              <button data-v="light"  class="${theme==='light'?'on':''}">Свет</button>
+              <button data-v="dark"   class="${theme==='dark'?'on':''}">Тьма</button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-label">Звук при отметке</div>
+              <div class="settings-row-hint">Мягкий щелчок через WebAudio</div>
+            </div>
+            <div class="toggle ${Prefs.sound?'on':''}" id="soundTog" role="switch" aria-checked="${Prefs.sound}"></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-label">Вибрация</div>
+              <div class="settings-row-hint">Работает не во всех браузерах</div>
+            </div>
+            <div class="toggle ${Prefs.haptics?'on':''}" id="hapticsTog" role="switch" aria-checked="${Prefs.haptics}"></div>
+          </div>
+        </div>
+
+        <div class="settings-block">
+          <button class="settings-action" id="exportBtn">
+            <span>Экспорт данных (резервная копия)</span>
+            <span class="chev">⤓</span>
+          </button>
+          <button class="settings-action" id="exportWidgetBtn">
+            <span>Экспорт для виджета iPhone</span>
+            <span class="chev">⤓</span>
+          </button>
+          <button class="settings-action" id="importBtn">
+            <span>Импорт данных</span>
+            <span class="chev">⤒</span>
+          </button>
+          <button class="settings-action danger" id="wipeBtn">
+            <span>Удалить все данные</span>
+            <span class="chev">×</span>
+          </button>
+        </div>
+
+        <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:8px;line-height:1.5;">
+          Emeli · данные хранятся локально в твоём браузере
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn btn-primary" id="closeSettings" style="flex:1">Готово</button>
+        </div>
+      `;
+      sOver.classList.add('active');
+
+      sMod.querySelectorAll('#themeSeg button').forEach(b => {
+        b.onclick = () => {
+          Prefs.theme = b.dataset.v;
+          sMod.querySelectorAll('#themeSeg button').forEach(x => x.classList.toggle('on', x === b));
+          applyTheme();
+        };
+      });
+      const soundTog = sMod.querySelector('#soundTog');
+      soundTog.onclick = () => {
+        Prefs.sound = !Prefs.sound;
+        soundTog.classList.toggle('on', Prefs.sound);
+        if (Prefs.sound) SoundFX.on();
+      };
+      const hapticsTog = sMod.querySelector('#hapticsTog');
+      hapticsTog.onclick = () => {
+        Prefs.haptics = !Prefs.haptics;
+        hapticsTog.classList.toggle('on', Prefs.haptics);
+        if (Prefs.haptics) buzz(20);
+      };
+
+      sMod.querySelector('#exportBtn').onclick = () => exportBackup();
+      sMod.querySelector('#exportWidgetBtn').onclick = () => exportForWidget();
+      sMod.querySelector('#importBtn').onclick = () => importFile.click();
+      sMod.querySelector('#wipeBtn').onclick = async () => {
+        if (!confirm('Полностью удалить все привычки и историю? Действие необратимо.')) return;
+        const habits = await DB.habits();
+        for (const h of habits) await DB.del(h.id);
+        closeOverlay(sOver);
+        renderQueued();
+        showToast('Всё очищено');
+      };
+      sMod.querySelector('#closeSettings').onclick = () => closeOverlay(sOver);
+    }
+
+    settingsBtn.addEventListener('click', e => { e.preventDefault(); openSettings(); });
+
+    // ───────── Export / Import ─────────
+    async function buildBackup() {
+      const habits = await DB.habits();
+      const comps = await DB.allComps();
+      return { app: 'emeli', version: 1, exported: new Date().toISOString(), habits, comps };
+    }
+
+    async function buildWidgetData() {
+      const habits = await DB.habits();
+      const allComps = await DB.allComps();
+      const today = fmt(new Date());
+      const byHabit = {};
+      for (const c of allComps) (byHabit[c.hId] = byHabit[c.hId] || []).push(c.date);
+      return {
+        app: 'emeli-widget',
+        version: 1,
+        exported: new Date().toISOString(),
+        today,
+        habits: habits.map(h => {
+          const list = byHabit[h.id] || [];
+          const st = streaks(list);
+          return {
+            name: h.name,
+            icon: h.icon || '⭐',
+            color: h.color || '#a78bfa',
+            doneToday: list.includes(today),
+            streak: st.cur,
+            best: st.best,
+          };
+        }),
+      };
+    }
+
+    async function exportBackup() {
+      const data = await buildBackup();
+      const fname = `emeli-backup-${fmt(new Date())}.json`;
+      await downloadOrShare(data, fname);
+    }
+    async function exportForWidget() {
+      const data = await buildWidgetData();
+      await downloadOrShare(data, 'emeli-widget.json');
+      showToast('Сохрани в iCloud Drive → Scriptable');
+    }
+
+    async function downloadOrShare(data, filename) {
+      const text = JSON.stringify(data, null, 2);
+      const blob = new Blob([text], { type: 'application/json' });
+      // Try Web Share API with files first (iOS Safari 16+)
+      if (navigator.canShare) {
+        try {
+          const file = new File([blob], filename, { type: 'application/json' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: filename });
+            return;
+          }
+        } catch (_) { /* fallback */ }
+      }
+      const url = URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = filename;
+      downloadLink.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    importFile.addEventListener('change', async e => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (data.app !== 'emeli' || !Array.isArray(data.habits)) throw new Error('Не похоже на бэкап Emeli');
+        if (!confirm(`Импортировать ${data.habits.length} привычек и ${data.comps?.length || 0} отметок? Текущие данные будут заменены.`)) return;
+        const cur = await DB.habits();
+        for (const h of cur) await DB.del(h.id);
+        const t = tx(['habits','comps'], 'readwrite');
+        const hs = t.objectStore('habits');
+        const cs = t.objectStore('comps');
+        const idMap = {};
+        for (const h of data.habits) {
+          const { id, ...rest } = h;
+          const req = hs.add(rest);
+          await new Promise(res => { req.onsuccess = () => { idMap[id] = req.result; res(); }; });
+        }
+        for (const c of (data.comps || [])) {
+          const newHid = idMap[c.hId];
+          if (newHid == null) continue;
+          cs.add({ hId: newHid, date: c.date });
+        }
+        await txDone(t);
+        closeOverlay(sOver);
+        renderQueued();
+        showToast('Импорт завершён');
+      } catch (err) {
+        alert('Ошибка импорта: ' + err.message);
+      }
+    });
+
     // ───────── Reminders ─────────
     const timers = {};
     function schedule(h) {
@@ -1359,6 +1790,7 @@
     });
 
     // ───────── Init ─────────
+    applyTheme();
     openDB().then(async () => {
       await render();
       await rescheduleAll();
@@ -1376,7 +1808,8 @@
     // Close menus on Esc
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
-        if (dOver.classList.contains('active')) closeOverlay(dOver);
+        if (sOver.classList.contains('active')) closeOverlay(sOver);
+        else if (dOver.classList.contains('active')) closeOverlay(dOver);
         else if (fOver.classList.contains('active')) closeOverlay(fOver);
         else hideCtx();
       }
