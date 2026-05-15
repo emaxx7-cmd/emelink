@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,43 +13,56 @@
   <title>Emeli</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { 
-      height: 100%; 
+    html {
+      height: 100%;
       overflow: hidden;
-      background: #080808;
+      position: fixed;
+      width: 100%;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #080808;
       color: #e8e8e8;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-      padding-right: env(safe-area-inset-right);
+      -webkit-tap-highlight-color: transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+    .safe-top { 
+      flex-shrink: 0;
+      height: env(safe-area-inset-top);
+      background: #080808;
+    }
+    .safe-bottom { 
+      flex-shrink: 0;
+      height: env(safe-area-inset-bottom);
+      background: #080808;
     }
     header {
-      padding: 16px 20px 12px;
+      padding: 8px 20px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
     }
     h1 {
-      font-size: 1.6rem;
-      font-weight: 500;
+      font-size: 1.5rem;
+      font-weight: 700;
       color: #fff;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
     }
     .ideal-badge {
       background: rgba(180,160,255,0.12);
       color: #b4a0ff;
       padding: 6px 14px;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 500;
       display: none;
       border: 1px solid rgba(180,160,255,0.2);
@@ -60,7 +73,7 @@
 
     #habitsGrid {
       flex: 1;
-      padding: 4px 16px 16px;
+      padding: 4px 16px 0;
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
@@ -68,12 +81,12 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding-bottom: calc(100px + env(safe-area-inset-bottom));
+      padding-bottom: 16px;
     }
     #habitsGrid::-webkit-scrollbar { display: none; }
 
     .habit-card {
-      background: rgba(22,22,24,0.8);
+      background: rgba(22,22,24,0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: 22px;
@@ -85,8 +98,7 @@
       width: calc(50% - 6px);
       box-shadow: 0 4px 16px rgba(0,0,0,0.5);
       border: 1px solid rgba(255,255,255,0.06);
-      transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  box-shadow 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.35s ease;
       cursor: pointer;
       overflow: hidden;
       min-height: 120px;
@@ -95,8 +107,7 @@
     .habit-card:active { 
       transform: scale(0.96); 
       box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  box-shadow 0.15s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
     .fill-overlay {
@@ -115,11 +126,9 @@
       margin-bottom: 6px;
       position: relative;
       z-index: 1;
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: transform 0.3s ease;
     }
-    .habit-card.done .habit-icon {
-      transform: scale(1.1);
-    }
+    .habit-card.done .habit-icon { transform: scale(1.1); }
     .habit-name {
       font-size: 0.78rem;
       color: #bbb;
@@ -142,13 +151,11 @@
       width: 14px; height: 14px;
       border-radius: 4px;
       background: rgba(255,255,255,0.08);
-      transition: background 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-                  transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: background 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
     }
     .day-square.done {
       background: var(--habit-color, #b4a0ff);
-      box-shadow: 0 0 14px var(--habit-color, rgba(180,160,255,0.6));
+      box-shadow: 0 0 14px var(--habit-color, rgba(180,160,255,0.5));
       transform: scale(1.15);
     }
 
@@ -166,17 +173,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.25s ease, color 0.25s ease;
-    }
-    .card-menu-btn:active { 
-      background: rgba(255,255,255,0.15); 
-      color: #fff;
     }
 
     .fab {
       position: fixed;
-      bottom: calc(28px + env(safe-area-inset-bottom));
-      right: calc(28px + env(safe-area-inset-right));
+      bottom: 28px;
+      right: 28px;
       width: 56px;
       height: 56px;
       background: #b4a0ff;
@@ -190,16 +192,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  box-shadow 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
-                  background 0.25s ease;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.25s ease;
     }
     .fab:active { 
       background: #c8b8ff; 
       transform: scale(0.92); 
       box-shadow: 0 4px 14px rgba(180,160,255,0.6);
-      transition: transform 0.12s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  box-shadow 0.12s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     .overlay {
@@ -214,14 +212,14 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: opacity 0.35s ease;
     }
     .overlay.active { opacity: 1; pointer-events: all; }
 
     .modal {
       background: #1a1a1e;
       border-radius: 28px 28px 0 0;
-      padding: 28px 22px calc(28px + env(safe-area-inset-bottom));
+      padding: 28px 22px 28px;
       width: 100%;
       max-width: 480px;
       max-height: 80vh;
@@ -231,9 +229,7 @@
       transform: translateY(20px);
       transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
-    .overlay.active .modal {
-      transform: translateY(0);
-    }
+    .overlay.active .modal { transform: translateY(0); }
     .modal::-webkit-scrollbar { display: none; }
     .modal h2 { font-weight: 500; font-size: 1.2rem; margin-bottom: 20px; }
 
@@ -251,7 +247,7 @@
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 16px;
       transition: border-color 0.3s ease, background 0.3s ease;
     }
     .modal input:focus, .modal textarea:focus {
@@ -259,7 +255,7 @@
       border-color: rgba(180,160,255,0.5);
       background: rgba(255,255,255,0.1);
     }
-    .modal textarea { resize: vertical; min-height: 50px; }
+    .modal textarea { resize: none; min-height: 50px; }
 
     .modal-buttons {
       display: flex;
@@ -274,20 +270,12 @@
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  background 0.2s ease,
-                  box-shadow 0.2s ease;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
     .btn-primary { background: #b4a0ff; color: #000; }
-    .btn-primary:active { 
-      background: #c8b8ff; 
-      transform: scale(0.96); 
-    }
-    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; backdrop-filter: blur(10px); }
-    .btn-secondary:active { 
-      background: rgba(255,255,255,0.2); 
-      transform: scale(0.96); 
-    }
+    .btn-primary:active { background: #c8b8ff; transform: scale(0.96); }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .btn-secondary:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
 
     .delete-link {
       color: #ff6b6b;
@@ -297,7 +285,6 @@
       margin-top: 10px;
       cursor: pointer;
       display: block;
-      transition: color 0.2s ease;
     }
     .delete-link:active { color: #ff4444; }
 
@@ -317,12 +304,9 @@
       background: rgba(255,255,255,0.05);
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.25s ease, transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: background 0.25s ease, transform 0.25s ease;
     }
-    .emoji-picker span:active { 
-      background: rgba(255,255,255,0.2); 
-      transform: scale(1.15); 
-    }
+    .emoji-picker span:active { background: rgba(255,255,255,0.2); transform: scale(1.15); }
 
     .heatmap {
       display: flex;
@@ -334,12 +318,9 @@
       width: 11px; height: 11px;
       border-radius: 2px;
       background: rgba(255,255,255,0.08);
-      transition: background 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: background 0.3s ease, transform 0.3s ease;
     }
-    .heatmap-dot.filled { 
-      background: var(--heat-color, #b4a0ff); 
-      transform: scale(1.2);
-    }
+    .heatmap-dot.filled { background: var(--heat-color, #b4a0ff); transform: scale(1.2); }
 
     .stat { font-size: 0.85rem; margin-bottom: 4px; }
 
@@ -358,13 +339,9 @@
       border: 1px solid rgba(255,255,255,0.08);
       opacity: 0;
       transform: scale(0.9);
-      transition: opacity 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                  transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
-    .context-menu.show {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .context-menu.show { opacity: 1; transform: scale(1); }
     .context-menu button {
       background: none;
       border: none;
@@ -373,23 +350,22 @@
       text-align: left;
       font-size: 0.85rem;
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
     }
-    .context-menu button:active { 
-      background: rgba(255,255,255,0.1); 
-      color: #fff;
-    }
+    .context-menu button:active { background: rgba(255,255,255,0.1); color: #fff; }
   </style>
 </head>
 <body>
+  <div class="safe-top"></div>
   <header>
-    <h1>Emeli</h1>
+    <h1>Сделано сыном Игоря</h1>
     <div class="ideal-badge" id="idealBadge">Идеальная неделя</div>
   </header>
 
   <div id="habitsGrid"></div>
 
   <button class="fab" id="addBtn">+</button>
+
+  <div class="safe-bottom"></div>
 
   <div class="context-menu" id="contextMenu"></div>
 
@@ -403,7 +379,11 @@
 
   <script>
   (function() {
-    // ---------- IndexedDB ----------
+    // Prevent zoom on input focus
+    document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+    document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+    document.addEventListener('gestureend', function(e) { e.preventDefault(); });
+
     let db;
     function openDB(){
       return new Promise((res,rej)=>{
@@ -450,7 +430,6 @@
       }
     };
 
-    // ---------- Helpers ----------
     const monday = d => { const nd=new Date(d); nd.setDate(nd.getDate()-(nd.getDay()||7)+1); return nd; };
     const fmt = d => d.toISOString().slice(0,10);
     const days = (a,b) => Math.round((b-a)/864e5);
@@ -468,7 +447,6 @@
       return {cur,best};
     };
 
-    // ---------- DOM ----------
     const grid = document.getElementById('habitsGrid');
     const ideal = document.getElementById('idealBadge');
     const addBtn = document.getElementById('addBtn');
@@ -480,7 +458,6 @@
 
     let pressTimer, pressDone=false;
 
-    // ---------- Рендер ----------
     async function render(){
       const habits = await DB.habits();
       const mon = monday(new Date());
@@ -498,7 +475,6 @@
         card.style.setProperty('--habit-color', color);
 
         const fill = document.createElement('div'); fill.className='fill-overlay'; card.appendChild(fill);
-
         const ic = document.createElement('div'); ic.className='habit-icon'; ic.textContent=h.icon||'⭐'; card.appendChild(ic);
         const nm = document.createElement('div'); nm.className='habit-name'; nm.textContent=h.name; card.appendChild(nm);
 
@@ -563,13 +539,8 @@
       const r = card.getBoundingClientRect();
       ctxMenu.style.left=Math.min(r.right-20, window.innerWidth-140)+'px';
       ctxMenu.style.top=Math.min(r.top, window.innerHeight-90)+'px';
-      // Show with animation
       ctxMenu.style.display='flex';
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          ctxMenu.classList.add('show');
-        });
-      });
+      requestAnimationFrame(() => { requestAnimationFrame(() => { ctxMenu.classList.add('show'); }); });
       setTimeout(()=>document.addEventListener('click', function h(){ hideCtx(); document.removeEventListener('click',h); },{once:true}),0);
     }
     function hideCtx(){ 
@@ -601,11 +572,9 @@
         <button class="delete-link" id="delFromDetail">Удалить привычку</button>
       `;
       dOver.classList.add('active');
-
       const hm = document.getElementById('heatmap');
       const t = new Date();
       for(let i=0;i<365;i++){ const d=new Date(t); d.setDate(t.getDate()-(364-i)); const ds=fmt(d); const dot=document.createElement('div'); dot.className='heatmap-dot'+(comps.includes(ds)?' filled':''); hm.appendChild(dot); }
-
       document.getElementById('closeDetail').onclick = ()=>{ dOver.classList.remove('active'); render(); };
       document.getElementById('editFromDetail').onclick = ()=>{ dOver.classList.remove('active'); openForm(h); };
       document.getElementById('delFromDetail').onclick = async ()=>{ if(confirm('Удалить?')){ await DB.del(id); dOver.classList.remove('active'); render(); } };
@@ -617,46 +586,35 @@
       const emojis = ['⭐','💪','🧠','📚','💧','🏃','🧘','🎯','💤','🍎','🚭','✍️','📱','🎨','💰'];
       fMod.innerHTML = `
         <h2>${edit?'Редактировать':'Новая привычка'}</h2>
-        <label>Название <input type="text" id="fName" value="${habit?.name||''}"></label>
-        <label>Описание <textarea id="fDesc">${habit?.description||''}</textarea></label>
-        <label>Категория <input type="text" id="fCat" value="${habit?.category||''}"></label>
+        <label>Название <input type="text" id="fName" value="${habit?.name||''}" autocomplete="off"></label>
+        <label>Описание <textarea id="fDesc" autocomplete="off">${habit?.description||''}</textarea></label>
+        <label>Категория <input type="text" id="fCat" value="${habit?.category||''}" autocomplete="off"></label>
         <label>Цвет <input type="color" id="fColor" value="${habit?.color||'#b4a0ff'}"></label>
-        <label>Иконка <input type="text" id="fIcon" value="${habit?.icon||'⭐'}" maxlength="2"></label>
+        <label>Иконка <input type="text" id="fIcon" value="${habit?.icon||'⭐'}" maxlength="2" autocomplete="off"></label>
         <div class="emoji-picker" id="emojiPicker"></div>
-        <label>Теги (через запятую) <input type="text" id="fTags" value="${habit?.tags?.join(',')||''}"></label>
+        <label>Теги (через запятую) <input type="text" id="fTags" value="${habit?.tags?.join(',')||''}" autocomplete="off"></label>
         <div class="modal-buttons">
           <button class="btn btn-secondary" id="cancelForm">Отмена</button>
           <button class="btn btn-primary" id="saveForm">Сохранить</button>
         </div>
       `;
       fOver.classList.add('active');
-
       const ep = document.getElementById('emojiPicker');
       emojis.forEach(e=>{ const s=document.createElement('span'); s.textContent=e; s.onclick=()=>{ document.getElementById('fIcon').value=e; }; ep.appendChild(s); });
-
       document.getElementById('cancelForm').onclick = ()=>{ fOver.classList.remove('active'); };
       document.getElementById('saveForm').onclick = async ()=>{
         const name = document.getElementById('fName').value.trim();
         if(!name){ alert('Введи название'); return; }
         const data = {
-          name,
-          description: document.getElementById('fDesc').value.trim(),
+          name, description: document.getElementById('fDesc').value.trim(),
           category: document.getElementById('fCat').value.trim(),
           color: document.getElementById('fColor').value,
           icon: document.getElementById('fIcon').value.trim() || '⭐',
           tags: document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
         };
-        if(edit){
-          const upd = {...habit, ...data};
-          await DB.update(upd);
-          if(upd.reminder) schedule(upd);
-        } else {
-          const newId = await DB.add(data);
-          const h = await DB.habit(newId);
-          if(h && h.reminder) schedule(h);
-        }
-        fOver.classList.remove('active');
-        render();
+        if(edit){ const upd = {...habit, ...data}; await DB.update(upd); if(upd.reminder) schedule(upd); }
+        else { const newId = await DB.add(data); const h = await DB.habit(newId); if(h && h.reminder) schedule(h); }
+        fOver.classList.remove('active'); render();
       };
     }
 
@@ -665,34 +623,21 @@
       if(!h.reminder) return;
       if(timers[h.id]) clearTimeout(timers[h.id]);
       const [hh,mm] = h.reminder.split(':');
-      const now = new Date();
-      const rd = new Date(); rd.setHours(hh,mm,0,0);
+      const now = new Date(); const rd = new Date(); rd.setHours(hh,mm,0,0);
       if(rd <= now) rd.setDate(rd.getDate()+1);
       timers[h.id] = setTimeout(()=>{
-        if(Notification.permission==='granted'){
-          new Notification('Emeli', { body: `Не забудь: ${h.name}`, icon: 'icon.svg' });
-        }
+        if(Notification.permission==='granted'){ new Notification('Emeli', { body: `Не забудь: ${h.name}`, icon: 'icon.svg' }); }
         schedule(h);
       }, rd - now);
     }
 
-    addBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      openForm();
-    });
-
-    openDB().then(async ()=>{
-      await render();
-      if(Notification.permission==='default') Notification.requestPermission();
-    });
+    addBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openForm(); });
+    openDB().then(async ()=>{ await render(); if(Notification.permission==='default') Notification.requestPermission(); });
     window.addEventListener('focus', render);
   })();
   </script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
   </script>
 </body>
 </html>
